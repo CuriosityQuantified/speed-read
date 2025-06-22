@@ -1,0 +1,312 @@
+/* Cross-browser compatibility styles */
+
+/* Webkit (Chrome, Safari) specific */
+@supports (-webkit-appearance: none) {
+  /* Smooth scrolling for webkit browsers */
+  .saved-texts-list {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Better scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Firefox specific */
+@-moz-document url-prefix() {
+  /* Firefox scrollbar styling */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
+  }
+
+  /* Fix Firefox input styling */
+  input[type="range"] {
+    -moz-appearance: none;
+  }
+
+  input[type="range"]::-moz-range-track {
+    background: #e0e0e0;
+    border-radius: 2px;
+    height: 4px;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    background: #2196F3;
+    border: none;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
+  /* Fix Firefox button styling */
+  button {
+    -moz-appearance: none;
+  }
+
+  /* Fix contenteditable in Firefox */
+  [contenteditable="true"] {
+    -moz-user-select: text;
+  }
+}
+
+/* Edge/IE specific */
+@supports (-ms-ime-align: auto) {
+  /* Fix Edge scrollbar */
+  .saved-texts-list {
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
+  /* Fix Edge input range */
+  input[type="range"]::-ms-track {
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+    height: 4px;
+  }
+
+  input[type="range"]::-ms-thumb {
+    background: #2196F3;
+    border: none;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+  }
+
+  input[type="range"]::-ms-fill-lower {
+    background: #2196F3;
+  }
+
+  input[type="range"]::-ms-fill-upper {
+    background: #e0e0e0;
+  }
+}
+
+/* Safari specific */
+@supports (-webkit-backdrop-filter: none) and (not (-webkit-touch-callout: none)) {
+  /* Fix Safari contenteditable */
+  [contenteditable="true"] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  /* Fix Safari button active state */
+  button:active {
+    -webkit-transform: translateY(1px);
+  }
+}
+
+/* iOS Safari specific */
+@supports (-webkit-touch-callout: none) {
+  /* Disable callout on long press */
+  * {
+    -webkit-touch-callout: none;
+  }
+
+  /* Allow text selection where needed */
+  .text-input-textarea,
+  [contenteditable="true"] {
+    -webkit-touch-callout: default;
+    -webkit-user-select: text;
+  }
+
+  /* Fix iOS input zoom */
+  input[type="text"],
+  input[type="number"],
+  textarea {
+    font-size: 16px;
+  }
+
+  /* Prevent iOS bounce scrolling on body */
+  body {
+    position: fixed;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  #app {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Android specific */
+@media screen and (-webkit-min-device-pixel-ratio: 0) and (min-resolution: .001dpcm) {
+  /* Fix Android button tap highlight */
+  button {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Accessibility - Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  * {
+    outline-width: 2px !important;
+  }
+
+  button:focus,
+  input:focus,
+  textarea:focus,
+  [contenteditable="true"]:focus {
+    outline: 3px solid currentColor !important;
+    outline-offset: 2px !important;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-bg: #1a1a1a;
+    --secondary-bg: #2a2a2a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --accent-color: #4CAF50;
+    --border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .text-input-textarea {
+    background: #2a2a2a;
+    color: #e0e0e0;
+  }
+
+  .control-btn {
+    background: #3a3a3a;
+    color: #e0e0e0;
+    border-color: #4a4a4a;
+  }
+
+  .text-card {
+    background: #3a3a3a;
+    color: #e0e0e0;
+  }
+}
+
+/* Print styles */
+@media print {
+  /* Hide interactive elements */
+  button,
+  input[type="range"],
+  .resize-handle,
+  .saved-texts-bar {
+    display: none !important;
+  }
+
+  /* Show content clearly */
+  .reader-display {
+    border: 1px solid #000;
+    padding: 20px;
+  }
+
+  .text-input-textarea {
+    border: 1px solid #000;
+    min-height: 200px;
+  }
+
+  /* Use print-friendly colors */
+  * {
+    color: #000 !important;
+    background: #fff !important;
+  }
+}
+
+/* Feature detection fallbacks */
+@supports not (display: grid) {
+  /* Fallback for browsers without grid support */
+  .app-container {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@supports not (position: sticky) {
+  /* Fallback for browsers without sticky positioning */
+  .saved-texts-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .main-content {
+    margin-top: var(--header-height);
+  }
+}
+
+/* Ensure consistent box model */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Normalize button styles across browsers */
+button {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+  overflow: visible;
+  text-transform: none;
+  -webkit-appearance: button;
+  cursor: pointer;
+}
+
+button::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/* Normalize input range across browsers */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+
+input[type="range"]:focus {
+  outline: none;
+}
+
+/* Ensure contenteditable works consistently */
+[contenteditable="true"] {
+  cursor: text;
+  outline: none;
+}
+
+[contenteditable="true"]:empty::before {
+  content: attr(data-placeholder);
+  color: #999;
+}

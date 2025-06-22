@@ -1,37 +1,35 @@
-# macOS
-.DS_Store
-.AppleDouble
-.LSOverride
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+.env
 
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+# Node
+node_modules/
+dist/
+.npm
+*.log
+npm-debug.log*
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+.DS_Store
 
-# Claude local settings
-.claude/settings.local.json
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
 
-# Logs
-*.log
-
-# Environment variables
-.env
-.env.local
+# Build
+build/
+*.egg-info/

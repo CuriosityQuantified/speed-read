@@ -1,0 +1,223 @@
+/* Small window optimization styles */
+/* Designed for 1/9 desktop tile (approximately 300x400px) */
+
+/* Container adjustments for small windows */
+@media (max-width: 350px), (max-height: 500px) {
+  :root {
+    --header-height: 32px;
+    --reader-height: 80px;
+    --controls-height: 44px;
+  }
+
+  body {
+    font-size: 12px;
+  }
+
+  /* Optimize saved texts bar */
+  .saved-texts-bar {
+    padding: 0 5px;
+  }
+
+  /* Compact reader display */
+  .reader-display {
+    padding: 10px;
+  }
+
+  /* Minimal control spacing */
+  .controls-section {
+    padding: 4px;
+    gap: 4px;
+  }
+
+  /* Compact text input */
+  .text-input-section {
+    padding: 4px;
+  }
+
+  .text-input {
+    font-size: 12px;
+    padding: 6px;
+    min-height: 40px;
+  }
+}
+
+/* Ultra-compact mode for very small windows */
+@media (max-width: 320px) and (max-height: 450px) {
+  /* Hide less critical elements */
+  .stat-separator {
+    display: none;
+  }
+
+  /* Single-line controls */
+  .controls-wrapper {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  /* Minimal button sizes */
+  .control-btn {
+    padding: 4px 8px !important;
+    font-size: 11px !important;
+  }
+
+  /* Compact speed control */
+  #speed-slider {
+    width: 60px !important;
+  }
+
+  .speed-value {
+    font-size: 10px !important;
+    min-width: 50px !important;
+  }
+}
+
+/* Touch-friendly adjustments */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  .control-btn {
+    min-height: 36px;
+    min-width: 36px;
+  }
+
+  .text-card {
+    min-height: 32px;
+  }
+
+  .new-text-btn {
+    min-height: 32px;
+  }
+
+  /* Better spacing for touch */
+  .controls-wrapper {
+    gap: 8px;
+  }
+
+  .saved-texts-list {
+    gap: 6px;
+  }
+}
+
+/* High DPI adjustments */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Sharper borders */
+  .text-input,
+  .control-btn,
+  .text-card {
+    border-width: 0.5px;
+  }
+
+  /* Thinner scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px !important;
+    height: 6px !important;
+  }
+}
+
+/* Optimize for portrait orientation */
+@media (orientation: portrait) and (max-width: 400px) {
+  /* Maximize vertical space */
+  :root {
+    --header-height: 30px;
+    --controls-height: 40px;
+  }
+
+  /* Stack controls vertically if needed */
+  @media (max-height: 600px) {
+    .controls-wrapper {
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .speed-control {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
+/* Optimize for landscape orientation */
+@media (orientation: landscape) and (max-height: 400px) {
+  /* Minimize vertical elements */
+  :root {
+    --header-height: 28px;
+    --reader-height: 60px;
+    --controls-height: 36px;
+  }
+
+  /* Hide text input by default in landscape */
+  .text-input-wrapper:not(.expanded) {
+    max-height: 32px;
+  }
+
+  /* Compact reader */
+  .word-display {
+    font-size: 20px !important;
+  }
+
+  .context-words {
+    font-size: 12px !important;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000;
+  }
+
+  .text-input,
+  .control-btn,
+  .text-card {
+    border-width: 2px;
+  }
+
+  .text-card.active {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+}
+
+/* Focus indicators for keyboard navigation */
+.control-btn:focus-visible,
+.text-card:focus-visible,
+.new-text-btn:focus-visible {
+  outline: 2px solid #2196F3;
+  outline-offset: 2px;
+}
+
+/* Optimize animations for performance */
+@media (max-width: 400px) {
+  /* Disable non-essential animations */
+  .text-card {
+    transition: background-color 0.2s ease;
+  }
+
+  .control-btn:hover {
+    transform: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .saved-texts-bar,
+  .controls-section {
+    display: none;
+  }
+
+  .reader-display {
+    height: auto;
+    page-break-inside: avoid;
+  }
+
+  .text-input-section {
+    height: auto;
+  }
+}

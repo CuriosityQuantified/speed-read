@@ -124,3 +124,5 @@ This is a static file that can be deployed anywhere:
 
 ## Ongoing Development
 Create and manage local markdown files to plan and track your progress. Use these markdown files to help with your memory management. Commonly search for any current markdown files before creating a new one to help manage duplication and sprawl. 
+
+Use implementation-plan.md to track and update your progress. Edit the plan with any notes. Use this as your scratchpad and organizational document. 
