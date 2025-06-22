@@ -115,3 +115,6 @@ This is a static file that can be deployed anywhere:
 - Netlify/Vercel (drop file)
 - Any static web server
 - Local file system (file:// protocol)
+
+## Ongoing Development
+Create and manage local markdown files to plan and track your progress. Use these markdown files to help with your memory management. Commonly search for any current markdown files before creating a new one to help manage duplication and sprawl. 
