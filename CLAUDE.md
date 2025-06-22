@@ -7,6 +7,35 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **GitHub Username**: CuriosityQuantified
 **GitHub URL**: https://github.com/CuriosityQuantified
 **Email**: nicholas.pate1320@gmail.com
+**Repository**: https://github.com/CuriosityQuantified/speed-read (private)
+**Default Branch**: main
+
+## Git Configuration
+
+When working with this repository, use these git settings:
+```bash
+git config user.name "CuriosityQuantified"
+git config user.email "nicholas.pate1320@gmail.com"
+```
+
+## GitHub Workflow
+
+1. **Committing Changes**: Follow conventional commit messages
+   - feat: New features
+   - fix: Bug fixes
+   - docs: Documentation changes
+   - refactor: Code refactoring
+   - test: Test additions/changes
+   - chore: Build process or auxiliary tool changes
+
+2. **Pushing Changes**: 
+   ```bash
+   git push origin main
+   ```
+
+3. **Creating Issues**: Use GitHub issues for tracking bugs and feature requests
+
+4. **Pull Requests**: Not typically needed for solo development, but use for major features
 
 ## Project Overview
 
