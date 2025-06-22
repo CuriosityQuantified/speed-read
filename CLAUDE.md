@@ -6,6 +6,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a standalone RSVP (Rapid Serial Visual Presentation) speed reading web application implemented as a single HTML file with embedded CSS and JavaScript.
 
+**Planned Migration**: TypeScript + Vite refactor is planned (see project-structure.md) to add:
+- Saved texts with horizontal navigation
+- Small window optimization (1/9 desktop tile)
+- Modular component architecture
+- Local storage persistence
+
 ## Development Environment
 
 **No build tools or dependencies** - This is a pure HTML/CSS/JavaScript application that runs directly in the browser.
