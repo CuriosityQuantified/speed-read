@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP Speed Reader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #FFFACD;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #FFFACD;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            transition: border-color 0.3s;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+        .display-area {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            padding: 60px 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #word-display {
+            font-size: 2.5em;
+            display: flex;
+            gap: 10px;
+            align-items: baseline;
+            justify-content: center;
+        }
+
+        .word {
+            transition: all 0.2s ease;
+            text-align: center;
+            flex: 0 0 auto;
+        }
+
+        .word-prev2, .word-prev1, .word-next1, .word-next2 {
+            color: #666;
+            font-weight: 400;
+            font-size: 0.9em;
+            width: 150px;
+        }
+
+        .word-current {
+            color: #000;
+            font-weight: 700;
+            font-size: 1.1em;
+            position: relative;
+            width: 200px;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .play-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .play-btn:hover:not(:disabled) {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .pause-btn {
+            background: #ff9800;
+            color: white;
+        }
+
+        .pause-btn:hover:not(:disabled) {
+            background: #e68900;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        .control-btn {
+            background: #2196F3;
+            color: white;
+        }
+
+        .control-btn:hover:not(:disabled) {
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
+        }
+
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+        }
+
+        .speed-control label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .speed-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="range"] {
+            width: 200px;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #333;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: #555;
+        }
+
+        #speed-value {
+            font-weight: 700;
+            color: #333;
+            font-size: 1.2em;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #4CAF50, #45a049);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RSVP Speed Reader</h1>
+        
+        <div class="input-section">
+            <textarea id="text-input" placeholder="Paste or type your text here to start speed reading...">Welcome to the RSVP Speed Reader! This innovative reading technique displays one word at a time in rapid succession, allowing you to read faster by eliminating eye movements. Simply paste your text, adjust the speed, and press play to begin your speed reading journey. You can pause, rewind, or fast forward at any time using the controls below.</textarea>
+        </div>
+
+        <div class="display-area">
+            <div id="word-display">
+                <span class="word word-prev2"></span>
+                <span class="word word-prev1"></span>
+                <span class="word word-current">Ready</span>
+                <span class="word word-next1"></span>
+                <span class="word word-next2"></span>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="stats">
+            <span id="word-count">Word: 0 / 0</span>
+            <span id="time-remaining">Time remaining: 0:00</span>
+        </div>
+
+        <div class="controls">
+            <div class="button-group">
+                <button id="rewind-btn" class="control-btn">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/>
+                    </svg>
+                    Rewind
+                </button>
+                <button id="play-pause-btn" class="play-btn">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    Play
+                </button>
+                <button id="fast-forward-btn" class="control-btn">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/>
+                    </svg>
+                    Fast Forward
+                </button>
+            </div>
+
+            <div class="speed-control">
+                <label for="speed-slider">Reading Speed:</label>
+                <div class="speed-input">
+                    <input type="range" id="speed-slider" min="100" max="1000" value="300" step="25">
+                    <span id="speed-value">300 WPM</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let words = [];
+        let currentIndex = 0;
+        let isPlaying = false;
+        let intervalId = null;
+
+        const textInput = document.getElementById('text-input');
+        const wordDisplay = document.getElementById('word-display');
+        const wordPrev2 = wordDisplay.querySelector('.word-prev2');
+        const wordPrev1 = wordDisplay.querySelector('.word-prev1');
+        const wordCurrent = wordDisplay.querySelector('.word-current');
+        const wordNext1 = wordDisplay.querySelector('.word-next1');
+        const wordNext2 = wordDisplay.querySelector('.word-next2');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const rewindBtn = document.getElementById('rewind-btn');
+        const fastForwardBtn = document.getElementById('fast-forward-btn');
+        const speedSlider = document.getElementById('speed-slider');
+        const speedValue = document.getElementById('speed-value');
+        const progressFill = document.getElementById('progress-fill');
+        const wordCount = document.getElementById('word-count');
+        const timeRemaining = document.getElementById('time-remaining');
+
+        // Initialize word visibility
+        wordPrev2.style.visibility = 'hidden';
+        wordPrev1.style.visibility = 'hidden';
+        wordNext1.style.visibility = 'hidden';
+        wordNext2.style.visibility = 'hidden';
+
+        function updateWords() {
+            const text = textInput.value.trim();
+            if (text) {
+                // Split by whitespace and filter out empty strings
+                words = text.split(/\s+/).filter(word => word.length > 0);
+                currentIndex = 0;
+                updateDisplay();
+                updateStats();
+            }
+        }
+
+        function updateDisplay() {
+            if (words.length > 0 && currentIndex < words.length) {
+                // Current word
+                wordCurrent.textContent = words[currentIndex];
+                
+                // Previous words
+                if (currentIndex >= 2) {
+                    wordPrev2.textContent = words[currentIndex - 2];
+                    wordPrev2.style.visibility = 'visible';
+                } else {
+                    wordPrev2.textContent = '';
+                    wordPrev2.style.visibility = 'hidden';
+                }
+                
+                if (currentIndex >= 1) {
+                    wordPrev1.textContent = words[currentIndex - 1];
+                    wordPrev1.style.visibility = 'visible';
+                } else {
+                    wordPrev1.textContent = '';
+                    wordPrev1.style.visibility = 'hidden';
+                }
+                
+                // Next words
+                if (currentIndex < words.length - 1) {
+                    wordNext1.textContent = words[currentIndex + 1];
+                    wordNext1.style.visibility = 'visible';
+                } else {
+                    wordNext1.textContent = '';
+                    wordNext1.style.visibility = 'hidden';
+                }
+                
+                if (currentIndex < words.length - 2) {
+                    wordNext2.textContent = words[currentIndex + 2];
+                    wordNext2.style.visibility = 'visible';
+                } else {
+                    wordNext2.textContent = '';
+                    wordNext2.style.visibility = 'hidden';
+                }
+                
+                // Animate current word
+                wordCurrent.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    wordCurrent.style.transform = 'scale(1)';
+                }, 50);
+            } else if (currentIndex >= words.length) {
+                wordCurrent.textContent = 'Complete!';
+                wordPrev2.textContent = '';
+                wordPrev1.textContent = '';
+                wordNext1.textContent = '';
+                wordNext2.textContent = '';
+                stop();
+            }
+            updateProgress();
+            updateStats();
+        }
+
+        function updateProgress() {
+            const progress = words.length > 0 ? (currentIndex / words.length) * 100 : 0;
+            progressFill.style.width = `${progress}%`;
+        }
+
+        function updateStats() {
+            wordCount.textContent = `Word: ${Math.min(currentIndex + 1, words.length)} / ${words.length}`;
+            
+            const wordsRemaining = Math.max(0, words.length - currentIndex - 1);
+            const wpm = parseInt(speedSlider.value);
+            const secondsRemaining = (wordsRemaining / wpm) * 60;
+            const minutes = Math.floor(secondsRemaining / 60);
+            const seconds = Math.floor(secondsRemaining % 60);
+            timeRemaining.textContent = `Time remaining: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function play() {
+            if (words.length === 0) {
+                updateWords();
+            }
+            
+            if (words.length === 0) return;
+            
+            if (currentIndex >= words.length) {
+                currentIndex = 0;
+            }
+            
+            isPlaying = true;
+            updatePlayPauseButton();
+            
+            const wpm = parseInt(speedSlider.value);
+            const delay = 60000 / wpm; // Convert WPM to milliseconds per word
+            
+            updateDisplay();
+            
+            intervalId = setInterval(() => {
+                currentIndex++;
+                if (currentIndex >= words.length) {
+                    stop();
+                } else {
+                    updateDisplay();
+                }
+            }, delay);
+        }
+
+        function pause() {
+            isPlaying = false;
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+            updatePlayPauseButton();
+        }
+
+        function stop() {
+            pause();
+            if (currentIndex >= words.length) {
+                currentIndex = words.length - 1;
+            }
+            updateDisplay();
+        }
+
+        function updatePlayPauseButton() {
+            if (isPlaying) {
+                playPauseBtn.className = 'pause-btn';
+                playPauseBtn.innerHTML = `
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                    Pause
+                `;
+            } else {
+                playPauseBtn.className = 'play-btn';
+                playPauseBtn.innerHTML = `
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    Play
+                `;
+            }
+        }
+
+        function rewind() {
+            const skipWords = Math.ceil(words.length * 0.05); // Skip 5% of total words
+            currentIndex = Math.max(0, currentIndex - skipWords);
+            updateDisplay();
+            
+            if (isPlaying) {
+                pause();
+                play();
+            }
+        }
+
+        function fastForward() {
+            const skipWords = Math.ceil(words.length * 0.05); // Skip 5% of total words
+            currentIndex = Math.min(words.length - 1, currentIndex + skipWords);
+            updateDisplay();
+            
+            if (isPlaying) {
+                pause();
+                play();
+            }
+        }
+
+        // Event listeners
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                pause();
+            } else {
+                play();
+            }
+        });
+
+        rewindBtn.addEventListener('click', rewind);
+        fastForwardBtn.addEventListener('click', fastForward);
+
+        speedSlider.addEventListener('input', (e) => {
+            speedValue.textContent = `${e.target.value} WPM`;
+            updateStats();
+            
+            if (isPlaying) {
+                pause();
+                play();
+            }
+        });
+
+        textInput.addEventListener('input', () => {
+            if (!isPlaying) {
+                updateWords();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target === textInput) return; // Don't trigger shortcuts while typing
+            
+            switch(e.key) {
+                case ' ':
+                case 'Enter':
+                    e.preventDefault();
+                    if (isPlaying) {
+                        pause();
+                    } else {
+                        play();
+                    }
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    rewind();
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    fastForward();
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    speedSlider.value = Math.min(1000, parseInt(speedSlider.value) + 25);
+                    speedSlider.dispatchEvent(new Event('input'));
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    speedSlider.value = Math.max(100, parseInt(speedSlider.value) - 25);
+                    speedSlider.dispatchEvent(new Event('input'));
+                    break;
+            }
+        });
+
+        // Initialize
+        updateWords();
+    </script>
+</body>
+</html>
