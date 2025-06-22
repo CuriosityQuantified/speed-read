@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Repository Information
+
+**GitHub Username**: CuriosityQuantified
+**GitHub URL**: https://github.com/CuriosityQuantified
+**Email**: nicholas.pate1320@gmail.com
+
 ## Project Overview
 
 This is a standalone RSVP (Rapid Serial Visual Presentation) speed reading web application implemented as a single HTML file with embedded CSS and JavaScript.
