@@ -3,7 +3,7 @@
 // RequestAnimationFrame polyfill
 if (!window.requestAnimationFrame) {
   window.requestAnimationFrame = (function() {
-    return window.webkitRequestAnimationFrame ||
+    return (window as any).webkitRequestAnimationFrame ||
            (window as any).mozRequestAnimationFrame ||
            (window as any).oRequestAnimationFrame ||
            (window as any).msRequestAnimationFrame ||
@@ -93,7 +93,7 @@ if (!Element.prototype.matches) {
     (Element.prototype as any).oMatchesSelector ||
     (Element.prototype as any).webkitMatchesSelector ||
     function(this: Element, s: string) {
-      const matches = (this.document || this.ownerDocument).querySelectorAll(s)
+      const matches = ((this as any).document || this.ownerDocument).querySelectorAll(s)
       let i = matches.length
       while (--i >= 0 && matches[i] !== this) {}
       return i > -1

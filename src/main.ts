@@ -4,6 +4,7 @@ import { Progress } from './components/Progress'
 import { SavedTexts } from './components/SavedTexts'
 import { TextInput } from './components/TextInput'
 import { UrlInput } from './components/UrlInput'
+import { Auth } from './components/Auth'
 import { ReaderState, ControlsConfig, KeyboardShortcut, SavedText } from './types'
 import { splitTextIntoWords, calculateReadingTime, formatReadingTime, calculateProgress, getSkipWordCount } from './utils/textProcessor'
 import { TouchGestureHandler } from './utils/touchGestures'
@@ -19,7 +20,8 @@ let state: ReaderState = {
   words: [],
   currentIndex: 0,
   isPlaying: false,
-  wpm: 300
+  wpm: 300,
+  isAuthenticated: false
 }
 
 const controlsConfig: ControlsConfig = {
@@ -42,6 +44,58 @@ let positionUpdateTimer: number | null = null
 function initializeApp() {
   // Initialize error handler
   ErrorHandler.initialize()
+  
+  // Check authentication first
+  state.isAuthenticated = Auth.isAuthenticated()
+  
+  if (!state.isAuthenticated) {
+    showAuthScreen()
+    return
+  }
+  
+  showMainApp()
+}
+
+function showAuthScreen() {
+  const app = document.getElementById('app')
+  if (!app) return
+  
+  app.innerHTML = ''
+  const authContainer = document.createElement('div')
+  authContainer.id = 'auth-container'
+  app.appendChild(authContainer)
+  
+  const auth = new Auth(authContainer, {
+    onSuccess: () => {
+      state.isAuthenticated = true
+      showMainApp()
+    }
+  })
+}
+
+function showMainApp() {
+  const app = document.getElementById('app')
+  if (!app) return
+  
+  // Restore the main app structure
+  app.innerHTML = `
+    <div class="app-container">
+      <header class="saved-texts-bar" id="saved-texts-bar">
+        <!-- Saved texts will be inserted here -->
+      </header>
+      <main class="main-content">
+        <section class="reader-display" id="reader-display">
+          <!-- Word display will be inserted here -->
+        </section>
+        <section class="controls-section" id="controls-section">
+          <!-- Controls will be inserted here -->
+        </section>
+        <section class="text-input-section" id="text-input-section">
+          <!-- Text input will be inserted here -->
+        </section>
+      </main>
+    </div>
+  `
   
   // Get DOM elements
   const savedTextsBar = document.getElementById('saved-texts-bar')

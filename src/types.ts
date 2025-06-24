@@ -4,6 +4,7 @@ export interface ReaderState {
   isPlaying: boolean
   wpm: number
   activeTextId?: string
+  isAuthenticated: boolean
 }
 
 export interface SavedText {

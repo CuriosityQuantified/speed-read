@@ -28,7 +28,7 @@ export class UrlInput {
     this.container = container
     this.config = {
       placeholder: 'Enter a URL to extract content...',
-      websocketUrl: 'ws://localhost:8001/ws/agui',
+      websocketUrl: this.getWebSocketUrl(),
       ...config
     }
     this.callbacks = callbacks
@@ -75,6 +75,12 @@ export class UrlInput {
     this.elements.status = this.container.querySelector('#url-status')
 
     this.addStyles()
+  }
+
+  private getWebSocketUrl(): string {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+    const host = window.location.host
+    return `${protocol}//${host}/ws/agui`
   }
 
   private addStyles() {
@@ -335,7 +341,7 @@ export class UrlInput {
 
   private async extractViaRest(url: string) {
     try {
-      const response = await fetch('http://localhost:8001/api/extract', {
+      const response = await fetch('/api/extract', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
