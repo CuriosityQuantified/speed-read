@@ -34,8 +34,8 @@ logger = logging.getLogger(__name__)
 app = FastAPI(title="Speed Read Production Server")
 
 # Mount the backend API
-app.mount("/api", backend_app)
-app.mount("/ws", backend_app)
+# Note: backend_app already has /api and /ws prefixes in its routes
+app.mount("", backend_app)
 
 # Build frontend if dist doesn't exist
 dist_path = Path(__file__).parent / "dist"
